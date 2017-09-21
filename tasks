@@ -1,0 +1,24 @@
+#!/bin/bash
+
+image_name="xmik/php-apache-openshift"
+
+command="$1"
+case "${command}" in
+  build)
+      version=$(cat ./version.txt)
+      docker build -t "${image_name}:${version}" "./image"
+      exit $?
+      ;;
+  itest)
+      version=$(cat ./version.txt)
+      export IMAGE_TO_BE_TESTED="${image_name}:${version}"
+      echo "Testing image: ${IMAGE_TO_BE_TESTED}"
+      time bats "$(pwd)/test/bats"
+      exit $?
+      ;;
+  *)
+      echo "Invalid command: '${command}'"
+      exit 1
+      ;;
+esac
+set +e
