@@ -23,19 +23,22 @@ load 'variables'
 @test "container can be started" {
   docker run --name ${docker_container} -d -p ${docker_port}:${docker_port}\
     --net=${docker_network}\
+  # TODO: avoid sudo rm -rf
     -v "${data_dir}":/var/www/html\
-    "${IMAGE_TO_BE_TESTED}"
+    -v $(pwd)/test/test-files/virtual-host.conf:/etc/apache2/sites-enabled/000-default.conf\
+    "${IMAGE_TO_BE_TESTED}"\
+    /bin/bash -c "cd /var/www/html && test -d simple-php-website || git clone https://github.com/banago/simple-php-website.git ; apache2-foreground"
 
   # This does not work:
   # run /bin/bash -c "curl --retry 15 localhost:${docker_port}"
   # Wait here max 15 seconds for the container to be initialized and running.
   run /bin/bash -c "for i in {1..15}; do { echo \"trial: \$i\" && curl --silent localhost:${docker_port}; } && break || { sleep 1; [[ \$i == 15 ]] && exit 1; } done"
-  assert_output --partial "Hello World"
-  assert_output --partial "www.php.net"
+  assert_output --partial "Simple PHP Website"
   assert_equal "$status" 0
 }
 @test "docker logs shows no errors" {
   run docker logs ${docker_container}
+  assert_output --partial "Cloning into 'simple-php-website'"
   assert_output --partial "resuming normal operations"
   assert_output --partial "apache2 -D FOREGROUND"
   refute_output --partial "Permission Denied"

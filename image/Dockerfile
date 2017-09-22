@@ -2,7 +2,8 @@ FROM php:5.6.31-apache
 
 # Install mcrypt
 RUN apt-get update &&\
-  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends mcrypt php5-mcrypt libmcrypt-dev nano &&\
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+  mcrypt php5-mcrypt libmcrypt-dev nano git &&\
   docker-php-ext-install mcrypt &&\
   apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
