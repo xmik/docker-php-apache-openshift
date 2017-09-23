@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+# from: https://docs.openshift.org/latest/creating_images/guidelines.html
+if ! whoami &> /dev/null; then
+  if [ -w /etc/passwd ]; then
+    echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd
+  fi
+fi
+
+# below contents comes from:
+# https://github.com/docker-library/php/blob/master/5.6/apache/docker-php-entrypoint
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- apache2-foreground "$@"
+fi
+
+exec "$@"

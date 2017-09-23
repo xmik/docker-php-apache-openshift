@@ -22,12 +22,10 @@ load 'variables'
 
 @test "container can be started" {
   docker run --name ${docker_container} -d -p ${docker_port}:${docker_port}\
-    --net=${docker_network}\
-  # TODO: avoid sudo rm -rf
-    -v "${data_dir}":/var/www/html\
+    --net=${docker_network} --user=123123123\
     -v $(pwd)/test/test-files/virtual-host.conf:/etc/apache2/sites-enabled/000-default.conf\
     "${IMAGE_TO_BE_TESTED}"\
-    /bin/bash -c "cd /var/www/html && test -d simple-php-website || git clone https://github.com/banago/simple-php-website.git ; apache2-foreground"
+    /bin/bash -c "set -x && cd /var/www/html && test -d simple-php-website || git clone https://github.com/banago/simple-php-website.git ; apache2-foreground"
 
   # This does not work:
   # run /bin/bash -c "curl --retry 15 localhost:${docker_port}"

@@ -22,7 +22,7 @@ load 'variables'
 
 @test "container can be started" {
   docker run --name ${docker_container} -d -p ${docker_port}:${docker_port}\
-    --net=${docker_network}\
+    --net=${docker_network} --user=123123123\
     -v "${data_dir}":/var/www/html\
     "${IMAGE_TO_BE_TESTED}"
 

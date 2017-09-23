@@ -1,6 +1,7 @@
 ### 0.2.1 (23 Sep 2017)
 
 * make more directories world-writable
+* respect https://docs.openshift.org/latest/creating_images/guidelines.html
 
 ### 0.2.0 (22 Sep 2017)
 

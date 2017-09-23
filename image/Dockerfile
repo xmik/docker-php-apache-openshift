@@ -9,8 +9,11 @@ RUN apt-get update &&\
 
 RUN a2enmod rewrite
 
-# OpenShift default security model is to run the container under random UID, so
-# in order to drop the root user, we have to:
+# OpenShift Origin runs containers using an arbitrarily assigned user ID
+# (random UID) and root group. The user ID of the container is generated
+# dynamically, it will not have an associated entry in /etc/passwd.
+# https://docs.openshift.org/latest/creating_images/guidelines.html
+# Thus, in order to drop the root user, we have to:
 # 1. Run apache2 on a custom port (8080), a non-root user does not have access to port 80.
 # 2. Make some directories world writeable.
 # https://askubuntu.com/a/338239
@@ -23,3 +26,7 @@ RUN mkdir -p /var/run/apache2 && chmod 777 -R /var/run/apache2 &&\
   mkdir -p /etc/apache2/sites-enabled && chmod 777 -R /etc/apache2/sites-enabled &&\
   mkdir -p /var/www/html && chmod 777 -R /var/www/html
 # Compare also with: https://github.com/sclorg/s2i-php-container/
+
+COPY docker-php-entrypoint /usr/local/bin/
+RUN chmod 755 /usr/local/bin/docker-php-entrypoint &&\
+  chmod 664 /etc/passwd
