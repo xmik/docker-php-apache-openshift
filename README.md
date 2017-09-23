@@ -15,7 +15,7 @@ Simple example:
 ```
 docker run --name php-apache-openshift-itest -d -p 8080:8080\
   -v /tmp/php-apache-openshift-itest:/var/www/html\
-  xmik/php-apache-openshift:0.2.0
+  xmik/php-apache-openshift:0.2.1
 ```
 
 Example with website code from github and custom apache2 virtual host:
@@ -23,7 +23,7 @@ Example with website code from github and custom apache2 virtual host:
 docker run --name php-apache-openshift-itest -d -p 8080:8080\
   -v /tmp/php-apache-openshift-itest:/var/www/html\
   -v $(pwd)/test/test-files/virtual-host.conf:/etc/apache2/sites-enabled/000-default.conf\
-  xmik/php-apache-openshift:0.2.0\
+  xmik/php-apache-openshift:0.2.1\
   /bin/bash -c "cd /var/www/html && test -d simple-php-website || git clone https://github.com/banago/simple-php-website.git ; apache2-foreground"
 ```
 
