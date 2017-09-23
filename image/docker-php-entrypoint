@@ -4,7 +4,7 @@ set -e
 # from: https://docs.openshift.org/latest/creating_images/guidelines.html
 if ! whoami &> /dev/null; then
   if [ -w /etc/passwd ]; then
-    echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd
+    echo "${USER_NAME:-openshift}:x:$(id -u):0:${USER_NAME:-openshift} user:${HOME}:/sbin/nologin" >> /etc/passwd
   fi
 fi
 

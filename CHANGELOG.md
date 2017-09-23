@@ -1,3 +1,7 @@
+### 0.2.2 (23 Sep 2017)
+
+* install ssh-client, so that we can git clone over ssh
+
 ### 0.2.1 (23 Sep 2017)
 
 * make more directories world-writable
