@@ -4,7 +4,13 @@ set -e
 # from: https://docs.openshift.org/latest/creating_images/guidelines.html
 if ! whoami &> /dev/null; then
   if [ -w /etc/passwd ]; then
+    export HOME="/home/${USER_NAME:-openshift}"
     echo "${USER_NAME:-openshift}:x:$(id -u):0:${USER_NAME:-openshift} user:${HOME}:/sbin/nologin" >> /etc/passwd
+    # I would like that, but it results in:
+    # chown: changing ownership of '/home/openshift': Operation not permitted
+    # chown openshift ${HOME}
+    mkdir -p ${HOME}/.ssh
+    chmod 0700 ${HOME}/.ssh
   fi
 fi
 

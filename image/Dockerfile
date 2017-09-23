@@ -1,6 +1,6 @@
 FROM php:5.6.31-apache
 
-# Install mcrypt
+# Install mcrypt, git, ssh-client
 RUN apt-get update &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   mcrypt php5-mcrypt libmcrypt-dev nano git ssh-client &&\
@@ -27,8 +27,12 @@ RUN mkdir -p /var/run/apache2 && chmod 777 -R /var/run/apache2 &&\
   mkdir -p /var/lock/apache2 && chmod 777 -R /var/lock/apache2 &&\
   mkdir -p /etc/apache2/sites-enabled && chmod 777 -R /etc/apache2/sites-enabled &&\
   mkdir -p /var/www/html && chmod 777 -R /var/www/html
-# Compare also with: https://github.com/sclorg/s2i-php-container/
+# Compare also with:
+# https://github.com/sclorg/s2i-php-container/
+# https://github.com/openshift-qe/ssh-git-docker/blob/master/ssh-git-openshift/Dockerfile
 
 COPY docker-php-entrypoint /usr/local/bin/
 RUN chmod 755 /usr/local/bin/docker-php-entrypoint &&\
-  chmod 664 /etc/passwd
+  chmod 664 /etc/passwd &&\
+  mkdir -p /home/openshift &&\
+  chmod 777 -R /home/openshift
